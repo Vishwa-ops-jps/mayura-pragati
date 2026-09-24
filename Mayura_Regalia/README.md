@@ -75,3 +75,36 @@ The backend uses MySQL database `mayura_regalia` and automatically creates:
 - `products`
 
 Do not commit `.env` to source control. Change the default admin password and JWT secret before deployment.
+
+## Deploy to Railway
+
+This repository is set up to deploy as **one Railway web service** plus a
+**Railway MySQL service**. The Express server serves the compiled React app,
+including `/admin`, and the API remains available under `/api`.
+
+1. Push this repository to GitHub (the existing `origin` remote can be used).
+2. In Railway, create a project and add a **MySQL** service.
+3. Add a service from the GitHub repository. In its source settings, set the
+   root directory to `Mayura_Regalia`. Railway will use the included
+   `Dockerfile` and `railway.toml`.
+4. In the web service's Variables tab, add references to the MySQL service:
+
+   ```env
+   MYSQLHOST=${{MySQL.MYSQLHOST}}
+   MYSQLPORT=${{MySQL.MYSQLPORT}}
+   MYSQLUSER=${{MySQL.MYSQLUSER}}
+   MYSQLPASSWORD=${{MySQL.MYSQLPASSWORD}}
+   MYSQLDATABASE=${{MySQL.MYSQLDATABASE}}
+   DB_SSL=false
+   ```
+
+   Replace `MySQL` with the database service name if you rename it. Also set
+   `JWT_SECRET` to a long random value, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
+   Set `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, and SMS variables only when
+   those production integrations are being used.
+5. Generate a public domain for the web service. Set `FRONTEND_URL` to that
+   exact `https://...` domain and redeploy.
+
+The application creates its tables and seed data automatically on its first
+successful connection to MySQL. Confirm the deployment by opening
+`https://<your-domain>/api/health`, then visit the site and `/admin/login`.

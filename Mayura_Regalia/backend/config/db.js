@@ -17,17 +17,19 @@ const sslConfig =
     : undefined;
 
 const baseConfig = {
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT || 3306),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  // Railway's MySQL service exposes MYSQL* variables. DB_* remains
+  // supported for local development and external providers such as Aiven.
+  host: process.env.DB_HOST || process.env.MYSQLHOST,
+  port: Number(process.env.DB_PORT || process.env.MYSQLPORT || 3306),
+  user: process.env.DB_USER || process.env.MYSQLUSER,
+  password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD,
   ...(sslConfig ? { ssl: sslConfig } : {}),
 };
 
 let pool;
 
 async function initializeDatabase() {
-  const databaseName = process.env.DB_NAME || 'defaultdb';
+  const databaseName = process.env.DB_NAME || process.env.MYSQLDATABASE || 'defaultdb';
 
   const connection = await mysql.createConnection({
     ...baseConfig,
