@@ -31,7 +31,7 @@ const Dashboard = () => {
   if (error) return <div className="admin-error">{error}</div>;
   if (!summary) return null;
 
-  const maxTrend = Math.max(1, ...summary.revenueTrend.map((r) => r.revenue));
+  const maxTrend = Math.max(1, ...(summary.revenueTrend || []).map((r) => r.revenue));
   const completionPct = summary.totalOrders ? (summary.deliveredOrders / summary.totalOrders) * 100 : 0;
   const cancelPct = summary.totalOrders ? (summary.cancelledOrders / summary.totalOrders) * 100 : 0;
   const monthlyStats = (summary.monthlyRevenue || []).map((m) => ({ ...m, label: monthLabel(m.month) }));
