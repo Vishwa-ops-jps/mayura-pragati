@@ -31,11 +31,12 @@ const Dashboard = () => {
   if (error) return <div className="admin-error">{error}</div>;
   if (!summary) return null;
 
-  const maxTrend = Math.max(1, ...(summary.revenueTrend || []).map((r) => r.revenue));
-  const completionPct = summary.totalOrders ? (summary.deliveredOrders / summary.totalOrders) * 100 : 0;
-  const cancelPct = summary.totalOrders ? (summary.cancelledOrders / summary.totalOrders) * 100 : 0;
-  const monthlyStats = (summary.monthlyRevenue || []).map((m) => ({ ...m, label: monthLabel(m.month) }));
-
+ const s = summary?.data || summary || {};
+ const trend = s.revenueTrend || [];
+ const maxTrend = Math.max(1, ...trend.map((r) => r.revenue));
+ const completionPct = s.totalOrders ? (s.deliveredOrders / s.totalOrders) * 100 : 0;
+ const cancelPct = s.totalOrders ? (s.cancelledOrders / s.totalOrders) * 100 : 0;
+ const monthlyStats = (s.monthlyRevenue || []).map((m) => ({ ...m, label: monthLabel(m.month) }));
   return (
     <section>
       {/* Total Sales / Total Orders / Order Complete / Cancel Order */}
