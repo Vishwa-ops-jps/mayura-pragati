@@ -147,7 +147,7 @@ const Dashboard = () => {
           <table className="admin-table">
             <thead><tr><th>ORDER</th><th>CUSTOMER</th><th>TOTAL</th><th>STATUS</th><th>PAYMENT</th><th>DATE</th></tr></thead>
             <tbody>
-              {s.recentOrders.map((o) => (
+              {s.recentOrders?.map((o) => (
                 <tr key={o.id}>
                   <td>{o.orderNumber}</td>
                   <td>{o.customerName}</td>
@@ -159,18 +159,18 @@ const Dashboard = () => {
               ))}
             </tbody>
           </table>
-          {!s.recentOrders.length && <div className="empty-table">No orders yet.</div>}
+          {!s.recentOrders?.length && <div className="empty-table">No orders yet.</div>}
         </div>
       </div>
 
-      {s.topProducts.length > 0 && (
+      {s.topProducts?.length > 0 && (
         <div className="admin-panel-card table-card">
           <div className="panel-heading"><div><span>BEST SELLERS</span><h2>Top products</h2></div></div>
           <div className="table-wrap">
             <table className="admin-table">
               <thead><tr><th>PRODUCT</th><th>UNITS SOLD</th><th>REVENUE</th></tr></thead>
               <tbody>
-                {s.topProducts.map((p) => (
+                {s.topProducts?.map((p) => (
                   <tr key={p.name}><td>{p.name}</td><td>{p.unitsSold}</td><td>{formatCurrency(p.revenue)}</td></tr>
                 ))}
               </tbody>
